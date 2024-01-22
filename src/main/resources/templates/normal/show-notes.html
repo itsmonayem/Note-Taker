@@ -38,7 +38,7 @@
                     <tbody>
                     <tr th:each="note: ${noteList}">
                         <th scope="row" th:text="${note.id}"></th>
-                        <td th:text="${note.title}"></td>
+                        <td><a th:href="@{'/user/view-note/'+${note.id}}" th:text="${note.title}"></a></td>
                         <td th:text="${note.description}"></td>
                         <td th:text="${note.noteAddingTime}"></td>
                         <td>

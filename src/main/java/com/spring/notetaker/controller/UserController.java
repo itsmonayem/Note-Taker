@@ -32,11 +32,6 @@ public class UserController {
         LoggedStatus.STATUS = "loggedIn";
     }
 
-    @GetMapping("/index")
-    public String index(Model model){
-        model.addAttribute("loggedStatus",LoggedStatus.STATUS);
-        return "normal/index";
-    }
 
     @GetMapping("/add-note")
     public String formAddNote(Model model) {
@@ -130,6 +125,19 @@ public class UserController {
 
         this.noteRepository.save(note);
         return "redirect:/user/show-notes/0";
+    }
+
+
+
+    @GetMapping("/view-note/{id}")
+    public String viewNote(@PathVariable("id")int id, Model model, Principal principal){
+        model.addAttribute("loggedStatus","loggedIn");
+
+        Optional<Note> optionalNote = this.noteRepository.findById(id);
+        Note note = optionalNote.get();
+
+        model.addAttribute("note",note);
+        return "normal/view-note";
     }
 
 

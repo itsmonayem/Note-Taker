@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="/../base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+<section>
+    <div class="new-container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="my-card mt-3" th:object="${note}">
+                    <h3>Title</h3>
+                    <h5 th:text="${note.title}"></h5>
+                    <h3>Note creating time</h3>
+                    <h5 th:text="${note.noteAddingTime}"></h5>
+                    <h3>Description</h3>
+                    <h6 th:text="${note.description}"></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

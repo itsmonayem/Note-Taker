@@ -45,7 +45,7 @@ public class MyConfig {
                 ).formLogin(form ->
                         form.loginPage("/login")
                                 .loginProcessingUrl("/dologin")
-                                .defaultSuccessUrl("/user/index")
+                                .defaultSuccessUrl("/user/show-notes/0")
                                 .permitAll()
                 ).logout(logout->logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
