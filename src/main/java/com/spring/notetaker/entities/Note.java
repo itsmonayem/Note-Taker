@@ -9,7 +9,7 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String title;
-    private String body;
+    private String description;
     private Date noteAddingTime;
     @ManyToOne
     private User user;
@@ -17,10 +17,10 @@ public class Note {
     public Note() {
     }
 
-    public Note(int id, String title, String body, Date noteAddingTime, User user) {
+    public Note(int id, String title, String description, Date noteAddingTime, User user) {
         this.id = id;
         this.title = title;
-        this.body = body;
+        this.description = description;
         this.noteAddingTime = noteAddingTime;
         this.user = user;
     }
@@ -41,12 +41,12 @@ public class Note {
         this.title = title;
     }
 
-    public String getBody() {
-        return body;
+    public String getDescription() {
+        return description;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getNoteAddingTime() {
@@ -63,5 +63,15 @@ public class Note {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", noteAddingTime=" + noteAddingTime +
+                '}';
     }
 }

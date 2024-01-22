@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+<section>
+    <section class="new-container" th:classappend="${(loggedStatus == 'loggedIn')?'':'new-container-extend'}">
+        <div class="banner d-flex justify-content-center align-items-center">
+            <div class="text-center">
+                <div>
+                    <h1 class="font-weight-bold">About Note Taker</h1>
+                    <p>Kichu bolar nai</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+</body>
+</html>

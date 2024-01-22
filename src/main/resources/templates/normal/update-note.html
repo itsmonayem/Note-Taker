@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="/../base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+<section>
+    <div class="new-container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="my-card mt-3">
+
+                    <!--                        alert message-->
+                    <!--                        <div th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">-->
+                    <!--                            <p th:text="${message.content}"></p>-->
+                    <!--                        </div>-->
+
+                    <h1 class="text-center">Update your note</h1>
+                    <form th:object="${note}" th:action="@{'/user/do-update-note/'+${note.id}}" method="post">
+                        <div class="mb-3">
+                            <label for="inputTitle" class="form-label"></label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="inputTitle"
+                                   placeholder="Enter title of your note"
+                                   name="title"
+                                   th:value="${note.title}"
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control"
+                                      rows="10"
+                                      th:text="${note.description}"
+                                      placeholder="Enter details of your note"
+                                      name="description"></textarea>
+                        </div>
+
+
+
+                        <div class="container text-center">
+                            <button type="submit" class="btn bg-primary text-white">Update</button>
+                            <a th:href="@{/user/show-notes/0}" class="btn btn-warning text-white">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

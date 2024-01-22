@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="/../base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+<section>
+    <div class="new-container">
+        <div class="card col-md-10 offset-md-1">
+            <div class="card-body">
+
+
+<!--                alert message-->
+                <div th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">
+                    <p th:text="${message.content}"></p>
+                </div>
+
+                <!--                search-->
+<!--                <div class="search-container">-->
+<!--                    <input type="text" onkeyup="search()" class="form-control" id="search-input" placeholder="search name">-->
+<!--                    <div class="search-result">-->
+<!--                        <h5>Result</h5>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="note: ${noteList}">
+                        <th scope="row" th:text="${note.id}"></th>
+                        <td th:text="${note.title}"></td>
+                        <td th:text="${note.description}"></td>
+                        <td th:text="${note.noteAddingTime}"></td>
+                        <td>
+                            <a th:href="@{'/user/update/'+${note.id}}"  class="btn bg-primary btn-sm">UPDATE</a>
+                            <a th:href="@{'/user/delete/'+${note.id}}"  class="btn btn-danger btn-sm">DELETE</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+<!--                                Pagination-->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${(currentPage == 0)?'disabled':''}"><a class="page-link" th:href="@{'/user/show-notes/'+${currentPage-1}}">Prev</a></li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(1,totalPages)}"
+                            th:classappend="${currentPage == i-1?'active':''}"><a class="page-link"
+                                                                                  th:href="@{'/user/show-notes/'+${i-1}}"><span
+                                th:text="${i}"></span></a></li>
+                        <li class="page-item" th:classappend="${(currentPage+1 == totalPages)?'disabled':''}"><a class="page-link"
+                                                                                        th:href="@{'/user/show-notes/'+${currentPage+1}}">Next</a></li>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

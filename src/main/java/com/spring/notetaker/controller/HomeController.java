@@ -2,6 +2,7 @@ package com.spring.notetaker.controller;
 
 import com.spring.notetaker.dao.UserRepository;
 import com.spring.notetaker.entities.User;
+import com.spring.notetaker.helper.LoggedStatus;
 import com.spring.notetaker.helper.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
 
 @Controller
 public class HomeController {
@@ -24,6 +27,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("title","Home Page");
+        model.addAttribute("loggedStatus", LoggedStatus.STATUS);
         return "home";
     }
 
@@ -33,6 +37,18 @@ public class HomeController {
         model.addAttribute("user",new User());
         return "signup";
     }
+
+
+
+    @GetMapping("/about")
+    public String aboutPage(Model model) {
+        model.addAttribute("title","About us");
+        model.addAttribute("loggedStatus",LoggedStatus.STATUS);
+        return "about";
+    }
+
+
+
 
     @PostMapping("/do-register")
     public String registerUser(@ModelAttribute User user, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model) {
@@ -54,9 +70,10 @@ public class HomeController {
     }
 
 
-    @GetMapping("login")
-    public String login(Model model) {
+    @GetMapping("/login")
+    public String login(Model model,Principal principal) {
         model.addAttribute("title","Login Page");
+        if (principal == null) LoggedStatus.STATUS = "loggedOut";
         return "login";
     }
 }

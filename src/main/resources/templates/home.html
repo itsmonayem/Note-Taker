@@ -5,8 +5,23 @@
     <title th:text="${title}"></title>
 </head>
 <body>
-    <section>
-        <p>This is a Home page</p>
+    <section class="new-container" th:classappend="${(loggedStatus == 'loggedIn')?'':'new-container-extend'}">
+        <div class="banner d-flex justify-content-center align-items-center">
+            <div class="text-center">
+                <div th:if="${loggedStatus == 'loggedIn'}">
+                    <h1 class="font-weight-bold">Note Taker</h1>
+                    <p>Start taking notes....</p>
+                    <a th:href="@{/user/add-note}" class="btn bg-primary btn-lg text-white">Get Started</a>
+                </div>
+
+                <div th:if="${loggedStatus == 'loggedOut'}">
+                    <h1 class="font-weight-bold">Note Taker</h1>
+                    <p>Start taking note with note taker...</p>
+                    <a th:href="@{/login}" class="btn bg-primary btn-lg text-white">Get Started</a>
+                </div>
+            </div>
+        </div>
     </section>
+
 </body>
 </html>

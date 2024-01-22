@@ -2,11 +2,21 @@
     background: #009688 !important;
 }
 
+.banner {
+    width: 100%;
+    height: 93vh;
+    background: linear-gradient(rgba(0,0,0,.8),rgba(0,0,0,.8)) ,url("../images/banner.png");
+    background-size: cover;
+    color: white;
+    z-index: 0;
+}
+
 .sidebar{
     height: 100vh;
     width: 15%;
     background: #e2e2e2;
     padding-top: 15px;
+    float: left;
 }
 
 .sidebar a{
@@ -15,22 +25,25 @@
     padding: 10px 25px;
     text-decoration: none;
     color: black;
-    border: rebeccapurple solid 5px;
 }
 
 .sidebar a:hover{
     background: white;
 }
 
-.content {
-    margin-left: 30%;
-    padding: 15px 35px;
-}
 
 .new-container{
-    width: 70%;
-    height: 80%;
-    border: 2px solid red;
-    z-index: 1;
+    width: 85%;
     color: black;
+    float: right;
+}
+.new-container-extend{
+    width: 100%!important;
+}
+
+.hide-content{
+    display: none;
+}
+
+.content{
 }
