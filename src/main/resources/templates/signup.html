@@ -13,9 +13,9 @@
                     <div class="my-card mt-3">
 
                         <!--                        alert message-->
-<!--                        <div th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">-->
-<!--                            <p th:text="${message.content}"></p>-->
-<!--                        </div>-->
+                        <div th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">
+                            <p th:text="${message.content}"></p>
+                        </div>
 
 
                         <h1 class="text-center">Register Here</h1>
@@ -27,11 +27,11 @@
                                        id="inputName"
                                        placeholder="Enter Here"
                                        name="name"
-                                       required>
-<!--                                <div th:each="e : ${#fields.errors('name')}"-->
-<!--                                     th:text="${e}"-->
-<!--                                     class="invalid-feedback">-->
-<!--                                </div>-->
+                                       th:value="${user.name}">
+                                <div th:each="e : ${#fields.errors('name')}"
+                                     th:text="${e}"
+                                     class="invalid-feedback">
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="inputEmail" class="form-label">Your Email</label>
@@ -40,7 +40,11 @@
                                        id="inputEmail"
                                        placeholder="Enter Here"
                                        name="email"
-                                       required>
+                                       th:value="${user.email}">
+                                <div th:each="e : ${#fields.errors('email')}"
+                                     th:text="${e}"
+                                     class="invalid-feedback">
+                                </div>
                             </div>
 
                             <div class="mb-3">

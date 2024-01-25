@@ -1,6 +1,9 @@
 package com.spring.notetaker.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 @Entity
@@ -8,7 +11,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @NotBlank(message = "Name should not be blank")
+    @Size(max = 20, message = "Name length should not exceed 20 characters")
     private String name;
+    @Column(unique = true)
+    @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Email is not valid")
     private String email;
     private String password;
     private String role;

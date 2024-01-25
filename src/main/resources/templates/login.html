@@ -11,11 +11,15 @@
             <div class="col-md-6 offset-md-3">
                 <div class="my-card mt-3">
 
+
+                    <div th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">
+                        <p th:text="${message.content}"></p>
+                    </div>
+
                     <h1 class="text-center">Login Here</h1>
 
                     <form method="post" th:action="@{/dologin}">
                         <h3 th:if="${param.error}" class="alert alert-danger">Invalid Username and Password</h3>
-<!--                        <h3 th:if="${alert}" class="alert alert-danger">You have been logged out</h3>-->
                         <div class="mb-3">
                             <label for="inputUserName" class="form-label">Your Email</label>
                             <input type="email"

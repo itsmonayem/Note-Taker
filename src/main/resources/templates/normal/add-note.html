@@ -11,13 +11,13 @@
             <div class="col-md-6 offset-md-3">
                 <div class="my-card mt-3">
 
-                    <!--                        alert message-->
-                    <!--                        <div th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">-->
-                    <!--                            <p th:text="${message.content}"></p>-->
-                    <!--                        </div>-->
+<!--                    alert message-->
+                    <div th:if="${message}" th:classappend="${message.type}" class="alert text-center" role="alert">
+                        <p th:text="${message.content}"></p>
+                    </div>
 
                     <h1 class="text-center">Add new note</h1>
-                    <form th:action="@{/user/do-add-note}" method="post" th:object="${note}">
+                    <form th:action="@{/user/do-add-note}" method="post" th:object="${note}" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="inputTitle" class="form-label"></label>
                             <input type="text"
@@ -32,6 +32,10 @@
                                       rows="10"
                                       placeholder="Enter details of your note"
                                       name="description"></textarea>
+                        </div>
+
+                        <div>
+                            <input type="file" name="note-image">
                         </div>
 
 

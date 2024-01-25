@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface NoteRepository extends JpaRepository<Note, Integer> {
     Page<Note> findNotesByUser(User user, Pageable pageable);
+
+    List<Note> findByTitleContainingOrDescriptionContainingAndUser(String query, String query2, User user);
 }

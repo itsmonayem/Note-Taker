@@ -6,17 +6,16 @@
 </head>
 <body>
 <section>
-    <div class="new-container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <div class="my-card mt-3" th:object="${note}">
-                    <h3>Title</h3>
-                    <h5 th:text="${note.title}"></h5>
-                    <h3>Note creating time</h3>
-                    <h5 th:text="${note.noteAddingTime}"></h5>
-                    <h3>Description</h3>
-                    <h6 th:text="${note.description}"></h6>
-                </div>
+    <div class="new-container d-flex justify-content-center align-items-center">
+        <div class="card view-card">
+            <img th:src="@{'/images/'+${note.getUser().id}+'/'+${note.getImage()}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${note.title}">Card title</h5>
+                <p class="card-text" th:text="${note.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+<!--                <a href="#" class="btn btn-primary">Go somewhere</a>-->
+            </div>
+            <div class="card-footer d-flex justify-content-end" th:text="${note.noteAddingTime} ">
+                Card footer
             </div>
         </div>
     </div>

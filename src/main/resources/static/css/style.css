@@ -33,6 +33,7 @@
 
 
 .new-container{
+
     width: 85%;
     color: black;
     float: right;
@@ -45,5 +46,23 @@
     display: none;
 }
 
-.content{
+.view-card{
+    margin-top: 20px;
+    width: 40rem;
+}
+.search-container{
+    position: relative;
+}
+
+.search-result{
+    position: absolute;
+    background: white;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid gray;
+    display: none;
+}
+
+.invalid-feedback{
+    display: inline!important;
 }

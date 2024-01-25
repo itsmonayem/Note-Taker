@@ -1,5 +1,6 @@
 package com.spring.notetaker.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -10,18 +11,21 @@ public class Note {
     private int id;
     private String title;
     private String description;
-    private Date noteAddingTime;
+    private String noteAddingTime;
+    private String image;
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     public Note() {
     }
 
-    public Note(int id, String title, String description, Date noteAddingTime, User user) {
+    public Note(int id, String title, String description, String noteAddingTime, String image, User user) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.noteAddingTime = noteAddingTime;
+        this.image = image;
         this.user = user;
     }
 
@@ -49,11 +53,11 @@ public class Note {
         this.description = description;
     }
 
-    public Date getNoteAddingTime() {
+    public String getNoteAddingTime() {
         return noteAddingTime;
     }
 
-    public void setNoteAddingTime(Date noteAddingTime) {
+    public void setNoteAddingTime(String noteAddingTime) {
         this.noteAddingTime = noteAddingTime;
     }
 
@@ -65,6 +69,14 @@ public class Note {
         this.user = user;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "Note{" +
@@ -72,6 +84,7 @@ public class Note {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", noteAddingTime=" + noteAddingTime +
+                ", image='" + image + '\'' +
                 '}';
     }
 }
