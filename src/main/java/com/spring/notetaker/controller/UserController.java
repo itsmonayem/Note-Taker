@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -57,7 +58,7 @@ public class UserController {
 
 
     @PostMapping("/do-add-note")
-    public String doAddNote(@ModelAttribute Note note, Principal principal, Model model, @RequestParam("note-image") MultipartFile file) {
+    public String doAddNote(@ModelAttribute Note note, Principal principal, Model model, @RequestParam("note-image") MultipartFile file, RedirectAttributes redirectAttributes) {
         model.addAttribute("loggedStatus", LoggedStatus.STATUS);
         System.out.println(note);
         User user = this.userRepository.getUserByUserName(principal.getName());
@@ -87,21 +88,22 @@ public class UserController {
         this.noteRepository.save(note);
 //        process and upload image
 
-        model.addAttribute("message", new Message("Note added successfully", "alert-success"));
-        return "normal/add-note";
+//        redirectAttributes.addAttribute("message", new Message("Note added successfully", "alert-success"));
+        redirectAttributes.addFlashAttribute("message",new Message("Note added successfully","alert-success"));
+        return "redirect:/user/add-note";
     }
 
 
-    @GetMapping("/show-notes/{page}")
-    public String showNotes(@PathVariable("page") Integer page, Model model, Principal principal) {
+    @GetMapping("/show-notes")
+    public String showNotes(@RequestParam("page") Optional<Integer> page, Model model, Principal principal) {
         model.addAttribute("loggedStatus", LoggedStatus.STATUS);
         User user = this.userRepository.getUserByUserName(principal.getName());
 
-        Pageable pageable = PageRequest.of(page, 5);
+        Pageable pageable = PageRequest.of(page.orElse(0), 5);
         Page<Note> noteList = this.noteRepository.findNotesByUser(user, pageable);
 
         model.addAttribute("noteList", noteList);
-        model.addAttribute("currentPage", page);
+        model.addAttribute("currentPage", page.orElse(0));
         model.addAttribute("totalPages", noteList.getTotalPages());
 
         System.out.println(noteList);
@@ -125,7 +127,7 @@ public class UserController {
             this.userRepository.save(user);
         }
 
-        return "redirect:/user/show-notes/0";
+        return "redirect:/user/show-notes";
     }
 
 
@@ -156,7 +158,7 @@ public class UserController {
         note.setUser(user);
 
         this.noteRepository.save(note);
-        return "redirect:/user/show-notes/0";
+        return "redirect:/user/show-notes";
     }
 
 
