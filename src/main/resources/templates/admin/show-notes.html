@@ -11,7 +11,7 @@
             <div class="card-body">
 
 
-<!--                alert message-->
+                <!--                alert message-->
                 <div th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">
                     <p th:text="${message.content}"></p>
                 </div>
@@ -30,38 +30,41 @@
                         <th scope="col">Title</th>
                         <th scope="col">Description</th>
                         <th scope="col">Time</th>
+                        <th scope="col">User Name</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="note: ${noteList}">
                         <th scope="row" th:text="${note.id}"></th>
-                        <td><a th:href="@{'/user/view-note/'+${note.id}}" th:text="${note.title}"></a></td>
+                        <td th:text="${note.title}"></td>
                         <td th:text="${note.description}"></td>
                         <td th:text="${note.noteAddingTime}"></td>
+                        <td th:text="${note.user.name}"></td>
                         <td>
-                            <a th:href="@{'/user/update/'+${note.id}}"  class="btn bg-primary btn-sm">UPDATE</a>
-                            <a th:href="@{'/user/delete/'+${note.id}}"  class="btn btn-danger btn-sm">DELETE</a>
+                            <a th:href="@{'/admin/delete-note/'+${note.id}}"  class="btn btn-danger btn-sm">DELETE</a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
 
-<!--                                Pagination-->
+                <!--                                Pagination-->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
-<!--                        <li class="page-item" th:classappend="${(currentPage == 0)?'disabled':''}"><a class="page-link" th:href="@{'/user/show-notes/'+${currentPage-1}}">Prev</a></li>-->
-<!--                        <li class="page-item" th:each="i : ${#numbers.sequence(1,totalPages)}"-->
-<!--                            th:classappend="${currentPage == i-1?'active':''}"><a class="page-link"-->
-<!--                                                                                  th:href="@{'/user/show-notes/'+${i-1}}"><span-->
-<!--                                th:text="${i}"></span></a></li>-->
-<!--                        <li class="page-item" th:classappend="${(currentPage+1 == totalPages)?'disabled':''}"><a class="page-link"-->
-<!--                                                                                        th:href="@{'/user/show-notes/'+${currentPage+1}}">Next</a></li>-->
                         <li class="page-item" th:each="i:${#numbers.sequence(currentPage - 3 , currentPage + 3)}">
-                            <a th:if="${i>=0&&i<totalPages}" class="page-link" th:classappend="${currentPage == i?'active':''}" th:href="@{/user/show-notes(page=${i})}">
-                                <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>
-                                <span th:unless="${(i == currentPage - 3 || i == currentPage + 3)}" th:text="${i}"></span>
-                            </a>
+                            <div th:if="${!(hitFrom == 'search')}">
+                                <a th:if="${i>=0&&i<totalPages}" class="page-link" th:classappend="${currentPage == i?'active':''}" th:href="@{/admin/show-notes(page=${i})}">
+                                    <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>
+                                    <span th:unless="${(i == currentPage - 3 || i == currentPage + 3)}" th:text="${i}"></span>
+                                </a>
+                            </div>
+
+                            <div th:if="${(hitFrom == 'search')}">
+                                <a th:if="${i>=0&&i<totalPages}" class="page-link" th:classappend="${currentPage == i?'active':''}" th:href="@{/search-note(page=${i})}">
+                                    <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>
+                                    <span th:unless="${(i == currentPage - 3 || i == currentPage + 3)}" th:text="${i}"></span>
+                                </a>
+                            </div>
                         </li>
                     </ul>
                 </nav>

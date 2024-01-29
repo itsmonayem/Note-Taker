@@ -52,8 +52,10 @@
 <div class="float-container">
     <div class="sidebar" th:classappend="${(loggedStatus == 'loggedIn')?'':'hide-content'}">
         <a th:href="@{/}">Home</a>
-        <a th:href="@{/user/add-note}">Add Note</a>
-        <a th:href="@{/user/show-notes}">View Notes</a>
+        <a th:if="${(loggedRole == 'ROLE_USER')}" th:href="@{/user/add-note}">Add Note</a>
+        <a th:if="${(loggedRole == 'ROLE_USER')}" th:href="@{/user/show-notes}">View Notes</a>
+        <a th:if="${(loggedRole == 'ROLE_ADMIN')}" th:href="@{/admin/show-users}">View Users</a>
+        <a th:if="${(loggedRole == 'ROLE_ADMIN')}" th:href="@{/admin/show-notes}">View Notes</a>
         <a href="">Profile</a>
     </div>
 
