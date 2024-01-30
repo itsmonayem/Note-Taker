@@ -13,7 +13,7 @@
 
                 <!--search-->
                 <form method="get" th:action="@{/search-notes}" class="search-container">
-                    <input type="text" name="query" class="form-control" id="search-input" placeholder="search title or description">
+                    <input type="text" name="query" class="form-control" id="search-input" placeholder="search title or description" th:value="${searchQuery}">
                     <button type="submit" class="btn bg-primary" style="margin-top: 5px">Search</button>
                 </form>
 
@@ -37,6 +37,7 @@
                         <td th:text="${note.noteAddingTime}"></td>
                         <td th:text="${note.user.name}"></td>
                         <td>
+                            <a th:if="${loggedRole=='ROLE_USER'}" th:href="@{'/user/update/'+${note.id}}"  class="btn bg-primary btn-sm">UPDATE</a>
                             <a th:href="@{'/admin/delete-note/'+${note.id}}"  class="btn btn-danger btn-sm">DELETE</a>
                         </td>
                     </tr>

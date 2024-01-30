@@ -44,8 +44,9 @@ public class SearchController {
             notePage = this.noteRepository.findByTitleContainingOrDescriptionContaining(query, query, pageable);
         } else {
             System.out.println(user.getName());
-            notePage = this.noteRepository.findNotesByTitleContainingAndDescriptionContainingAndUser(query, query, user, pageable);
+            notePage = this.noteRepository.findNotesByUserForSearch(user.getId(), query, pageable);
         }
+        model.addAttribute("searchQuery",query);
         model.addAttribute("noteList", notePage);
         model.addAttribute("currentPage", page.orElse(0));
         model.addAttribute("totalPages", notePage.getTotalPages());
