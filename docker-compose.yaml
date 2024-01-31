@@ -1,0 +1,30 @@
+version: '3'
+services:
+  mss-note-taker-app:
+    container_name: mss-note-taker-app
+    image: note-taker:v1
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      WAIT_HOSTS: mysql:3306
+    depends_on:
+      - docker-mysql
+
+  docker-mysql:
+    container_name: docker-mysql
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: note_taker
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_HOST: '%'
+    #    volumes:
+    #      - ./sql:docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=12345 --execute \"SHOW DATABASES\""
+      interval: 4s
+      timeout: 20s
+      retries: 5
