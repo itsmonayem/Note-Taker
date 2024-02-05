@@ -4,10 +4,7 @@ import com.spring.notetaker.dao.NoteRepository;
 import com.spring.notetaker.dao.UserRepository;
 import com.spring.notetaker.entities.Note;
 import com.spring.notetaker.entities.User;
-import com.spring.notetaker.helper.LoggedInfo;
-import com.spring.notetaker.helper.Message;
-import com.spring.notetaker.helper.Pagination;
-import com.spring.notetaker.helper.SearchParam;
+import com.spring.notetaker.helper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -108,7 +105,7 @@ public class NoteController {
 
         User user = this.userRepository.getUserByUserName(principal.getName());
 
-        Pageable pageable = PageRequest.of(page.orElse(0), pageSize.orElse(5));
+        Pageable pageable = PageRequest.of(page.orElse(1)-1, pageSize.orElse(5));
         Page<Note> noteList = this.noteRepository.findNotesByUser(user, pageable);
 
         model.addAttribute("noteList", noteList);
@@ -116,7 +113,7 @@ public class NoteController {
         model.addAttribute("totalPages", noteList.getTotalPages());
 
         Pagination pagination = new Pagination();
-        pagination.setCurrentPage(page.orElse(0));
+        pagination.setCurrentPage(page.orElse(1));
         pagination.setTotalPages(noteList.getTotalPages());
         pagination.setPageSize(pageSize.orElse(5));
         pagination.setQueries("/user/show-notes?page=");
@@ -150,16 +147,18 @@ public class NoteController {
 
 
 
-        Pageable pageable = PageRequest.of(page.orElse(0), pageSize.orElse(5));
-        Page<Note> notePage;
+        Pageable pageable = PageRequest.of(page.orElse(1)-1, pageSize.orElse(5));
 
-        notePage = this.noteRepository.findByTitleContainingAndDescriptionContainingAndUser(title, description, username.orElse(user.getName()), pageable);
+        Page<Note> notePage = this.noteRepository.findByTitleContainingAndDescriptionContainingAndUser(title, description, username.orElse(user.getName()), pageable);
 
         //Pagination
-        Pagination paginationInfo = new Pagination();
-        paginationInfo.setCurrentPage(page.orElse(0));
-        paginationInfo.setTotalPages(notePage.getTotalPages());
-        paginationInfo.setQueries("/user/search-notes?title="+title+"&description="+description+"&username="+username.orElse(user.getName())+"&pageSize="+pageSize.orElse(5)+"&page=");
+//        Pagination paginationInfo = new Pagination();
+//        paginationInfo.setCurrentPage(page.orElse(1));
+//        paginationInfo.setTotalPages(notePage.getTotalPages());
+//        paginationInfo.setQueries("/user/search-notes?title="+title+"&description="+description+"&username="+username.orElse(user.getName())+"&pageSize="+pageSize.orElse(5)+"&page=");
+        String queryRequest = "/user/search-notes?title="+title+"&description="+description+"&username="+username.orElse(user.getName())+"&pageSize="+pageSize.orElse(5)+"&page=";
+
+        Pagination paginationInfo  = CommonUtils.getPagination(new Pagination(),page.orElse(1),notePage.getTotalPages(),queryRequest);
 
         SearchParam searchParam = new SearchParam();
         searchParam.setTitle(title);
@@ -174,6 +173,8 @@ public class NoteController {
 
         return "normal/show-notes";
     }
+
+
 
 
 

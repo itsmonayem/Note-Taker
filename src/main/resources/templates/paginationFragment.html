@@ -9,16 +9,16 @@
         <nav th:if="${paginationInfo.totalPages != 0}" aria-label="Page navigation example">
             <ul class="pagination">
                 <li>
-                    <a class="page-link" th:classappend="${(paginationInfo.currentPage != 0)?'':'disabled'}" th:href="@{${paginationInfo.queries}+${paginationInfo.currentPage - 1}}">Prev</a>
+                    <a class="page-link" th:classappend="${(paginationInfo.currentPage > 1)?'':'disabled'}" th:href="@{${paginationInfo.queries}+${paginationInfo.currentPage - 1}}">Prev</a>
                 </li>
-                <li class="page-item" th:each="i:${#numbers.sequence(paginationInfo.currentPage - 3 , paginationInfo.currentPage + 3)}">
-                    <a th:if="${i>=0&&i<paginationInfo.totalPages}" class="page-link" th:classappend="${paginationInfo.currentPage == i?'active':''}" th:href="@{${paginationInfo.queries}+${i}}">
-                        <span th:if="${i == paginationInfo.currentPage - 3 || i == paginationInfo.currentPage + 3}">...</span>
-                        <span th:if="${!(i == paginationInfo.currentPage - 3 || i == paginationInfo.currentPage + 3)}" th:text="${i}"></span>
+                <li class="page-item" th:each="i:${#numbers.sequence(paginationInfo.currentPage - 4 , paginationInfo.currentPage + 2)}">
+                    <a th:if="${i>=0&&i<paginationInfo.totalPages}" class="page-link" th:classappend="${paginationInfo.currentPage == i + 1?'active':''}" th:href="@{${paginationInfo.queries}+${i+1}}">
+                        <span th:if="${i == paginationInfo.currentPage - 4 || i == paginationInfo.currentPage + 2}">...</span>
+                        <span th:if="${!(i == paginationInfo.currentPage - 4 || i == paginationInfo.currentPage + 2)}" th:text="${i+1}"></span>
                     </a>
                 </li>
                 <li>
-                    <a class="page-link" th:classappend="${(paginationInfo.currentPage != paginationInfo.totalPages - 1)?'':'disabled'}" th:href="@{${paginationInfo.queries}+${paginationInfo.currentPage + 1}}">Next</a>
+                    <a class="page-link" th:classappend="${(paginationInfo.currentPage != paginationInfo.totalPages)?'':'disabled'}" th:href="@{${paginationInfo.queries}+${paginationInfo.currentPage + 1}}">Next</a>
                 </li>
             </ul>
         </nav>

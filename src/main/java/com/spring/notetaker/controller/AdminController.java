@@ -46,13 +46,13 @@ public class AdminController {
 
 
 
-        Pageable pageable = PageRequest.of(page.orElse(0), pageSize.orElse(5));
+        Pageable pageable = PageRequest.of(page.orElse(1)-1, pageSize.orElse(5));
         Page<User> userList = this.userRepository.findAll("ROLE_USER", pageable);
 
         model.addAttribute("userList", userList);
 
         Pagination paginationInfo = new Pagination();
-        paginationInfo.setCurrentPage(page.orElse(0));
+        paginationInfo.setCurrentPage(page.orElse(1));
         paginationInfo.setTotalPages(userList.getTotalPages());
         paginationInfo.setQueries("/admin/show-users?pageSize="+pageSize.orElse(5)+"&page=");
 
@@ -76,14 +76,14 @@ public class AdminController {
         model.addAttribute("loggedRole",LoggedInfo.ROLE);
 
 
-        Pageable pageable = PageRequest.of(page.orElse(0),pageSize.orElse(5));
+        Pageable pageable = PageRequest.of(page.orElse(1)-1,pageSize.orElse(5));
         Page<User> userList = this.userRepository.findUserByNameContaining(username.orElse(""),pageable);
 
         model.addAttribute("userList", userList);
 
 
         Pagination pagination = new Pagination();
-        pagination.setCurrentPage(page.orElse(0));
+        pagination.setCurrentPage(page.orElse(1));
         pagination.setTotalPages(userList.getTotalPages());
         pagination.setQueries("/admin/search-users?username="+username.orElse("")+"&pageSize="+pageSize.orElse(5)+"&page=");
 
@@ -117,13 +117,13 @@ public class AdminController {
         Pagination paginationInfo = new Pagination();
         paginationInfo.setPageSize(pageSize.orElse(5));
 
-        Pageable pageable = PageRequest.of(page.orElse(0), paginationInfo.getPageSize());
+        Pageable pageable = PageRequest.of(page.orElse(1)-1, paginationInfo.getPageSize());
         Page<Note> notePage = this.noteRepository.findAll(pageable);
 
         model.addAttribute("noteList", notePage);
 
 
-        paginationInfo.setCurrentPage(page.orElse(0));
+        paginationInfo.setCurrentPage(page.orElse(1));
         paginationInfo.setTotalPages(notePage.getTotalPages());
         paginationInfo.setQueries("/admin/show-notes?pageSize="+pageSize.orElse(5)+"&page=");
 
@@ -153,13 +153,13 @@ public class AdminController {
 
 
 
-        Pageable pageable = PageRequest.of(page.orElse(0), pageSize.orElse(5));
+        Pageable pageable = PageRequest.of(page.orElse(1)-1, pageSize.orElse(5));
 
         Page<Note> notePage = this.noteRepository.findByTitleContainingAndDescriptionContainingAndUser(title, description, username.orElse(user.getName()), pageable);
 
         //Pagination
         Pagination paginationInfo = new Pagination();
-        paginationInfo.setCurrentPage(page.orElse(0));
+        paginationInfo.setCurrentPage(page.orElse(1));
         paginationInfo.setTotalPages(notePage.getTotalPages());
         paginationInfo.setQueries("/admin/search-notes?title="+title+"&description="+description+"&username="+username.orElse(user.getName())+"&pageSize="+pageSize.orElse(5)+"&page=");
 
