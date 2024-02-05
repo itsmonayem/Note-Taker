@@ -6,16 +6,54 @@
 </head>
 <body>
     <div th:fragment="pagination" th:object="${paginationInfo}">
-        <nav aria-label="Page navigation example">
+        <nav th:if="${paginationInfo.totalPages != 0}" aria-label="Page navigation example">
             <ul class="pagination">
+                <li>
+                    <a class="page-link" th:classappend="${(paginationInfo.currentPage != 0)?'':'disabled'}" th:href="@{${paginationInfo.queries}+${paginationInfo.currentPage - 1}}">Prev</a>
+                </li>
                 <li class="page-item" th:each="i:${#numbers.sequence(paginationInfo.currentPage - 3 , paginationInfo.currentPage + 3)}">
-                    <a th:if="${i>=0&&i<paginationInfo.totalPages}" class="page-link" th:classappend="${paginationInfo.currentPage == i?'active':''}" th:href="@{'/search-notes'+${paginationInfo.queries}">
-                        <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>
-                        <span th:unless="${(i == paginationInfo.currentPage - 3 || i == paginationInfo.currentPage + 3)}" th:text="${i}"></span>
+                    <a th:if="${i>=0&&i<paginationInfo.totalPages}" class="page-link" th:classappend="${paginationInfo.currentPage == i?'active':''}" th:href="@{${paginationInfo.queries}+${i}}">
+                        <span th:if="${i == paginationInfo.currentPage - 3 || i == paginationInfo.currentPage + 3}">...</span>
+                        <span th:if="${!(i == paginationInfo.currentPage - 3 || i == paginationInfo.currentPage + 3)}" th:text="${i}"></span>
                     </a>
+                </li>
+                <li>
+                    <a class="page-link" th:classappend="${(paginationInfo.currentPage != paginationInfo.totalPages - 1)?'':'disabled'}" th:href="@{${paginationInfo.queries}+${paginationInfo.currentPage + 1}}">Next</a>
                 </li>
             </ul>
         </nav>
     </div>
+
+<!--    <div th:fragment="searchItems">-->
+<!--        <form method="get" th:action="@{/search-notes}" class="row gy-2 gx-3 align-items-center">-->
+<!--            <div class="col-auto">-->
+<!--                <label class="visually-hidden" for="autoSizingInput">Title</label>-->
+<!--                <input type="text" class="form-control" id="autoSizingInput" placeholder="Search By Title">-->
+<!--            </div>-->
+<!--            <div class="col-auto">-->
+<!--                <label class="visually-hidden" for="autoSizingInputGroup">Description</label>-->
+<!--                <div class="input-group">-->
+<!--                    <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="Search by description">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-auto">-->
+<!--                <label class="visually-hidden" for="autoSizingInputGroup2">User</label>-->
+<!--                <div class="input-group">-->
+<!--                    <input type="text" class="form-control" id="autoSizingInputGroup2" placeholder="Search by User">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-auto">-->
+<!--&lt;!&ndash;                <label class="visually-hidden" for="autoSizingSelect">Preference</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                <select class="form-select" id="autoSizingSelect">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <option selected>Page Size...</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <option value="5">5</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <option value="10">10</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <option value="20">20</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                </select>&ndash;&gt;-->
+<!--                <button type="submit" class="btn bg-primary">Search</button>-->
+<!--                <button type="reset" class="btn btn-warning">Reset</button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
 </body>
 </html>

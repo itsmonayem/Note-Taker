@@ -16,11 +16,44 @@
                     <p th:text="${message.content}"></p>
                 </div>
 
-                <!--search-->
-                <form method="get" th:action="@{/search-notes}" class="search-container">
-                    <input type="text" name="query" class="form-control" id="search-input" placeholder="search title or description">
-                    <button type="submit" class="btn bg-primary" style="margin-top: 5px">Search</button>
+<!--                search-->
+<!--                <form method="get" th:action="@{/search-notes}" class="search-container">-->
+<!--                    <input type="text" name="query" class="form-control" id="search-input" placeholder="search title or description">-->
+<!--                    <button type="submit" class="btn bg-primary" style="margin-top: 5px">Search</button>-->
+<!--                </form>-->
+                <form th:action="@{/admin/search-notes}" th:object="${searchParam}" class="row gy-2 gx-3 align-items-center">
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="autoSizingInput">Title</label>
+                        <input type="text" class="form-control" id="autoSizingInput" name="title" th:value="${searchParam.title}" placeholder="Search By Title">
+                    </div>
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="autoSizingInputGroup">Description</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="description" th:value="${searchParam.description}" id="autoSizingInputGroup" placeholder="Search by description">
+                        </div>
+                    </div>
+                    <div class="col-auto" th:if="${loggedRole=='ROLE_ADMIN'}">
+                        <label class="visually-hidden" for="autoSizingInputGroup2">User</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="username" th:value="${searchParam.username}" id="autoSizingInputGroup2" placeholder="Search by User">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="pageSize">Page Size</label>
+                        <div class="input-group">
+                            <select name="pageSize" id="pageSize" th:field="${searchParam.pageSize}">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn bg-primary">Search</button>
+                        <button type="reset" class="btn btn-warning">Reset</button>
+                    </div>
                 </form>
+
 
 
                 <table class="table">
@@ -42,36 +75,33 @@
                         <td th:text="${note.noteAddingTime}"></td>
                         <td th:text="${note.user.name}"></td>
                         <td>
-                            <a th:href="@{'/admin/delete-note/'+${note.id}}"  class="btn btn-danger btn-sm">DELETE</a>
+                            <a th:href="@{'/admin/delete-note/'+${note.id}+'/'+${paginationInfo.currentPage}}"  class="btn btn-danger btn-sm">DELETE</a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <!--                                Pagination-->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item" th:each="i:${#numbers.sequence(currentPage - 3 , currentPage + 3)}">
-                            <div th:if="${!(hitFrom == 'search')}">
-                                <a th:if="${i>=0&&i<totalPages}" class="page-link" th:classappend="${currentPage == i?'active':''}" th:href="@{/admin/show-notes(page=${i})}">
-                                    <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>
-                                    <span th:unless="${(i == currentPage - 3 || i == currentPage + 3)}" th:text="${i}"></span>
-                                </a>
-                            </div>
 
-                            <div th:if="${(hitFrom == 'search')}">
-                                <a th:if="${i>=0&&i<totalPages}" class="page-link" th:classappend="${currentPage == i?'active':''}" th:href="@{/search-note(page=${i})}">
-                                    <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>
-                                    <span th:unless="${(i == currentPage - 3 || i == currentPage + 3)}" th:text="${i}"></span>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </nav>
+                <div class="d-flex">
+                    <div th:replace="paginationFragment::pagination"></div>
+<!--                    <form id="pageSizeForm" th:action="@{/admin/show-notes}">-->
+<!--                        <select id="pageSize" name="pageSize" th:value="${paginationInfo.pageSize}" onchange="submitForm()">-->
+<!--                            <option value="5">5</option>-->
+<!--                            <option value="10">10</option>-->
+<!--                            <option value="20">20</option>-->
+<!--                        </select>-->
+<!--                    </form>-->
+<!--                    <script type="text/javascript">-->
+<!--                        function submitForm() {-->
+<!--                            document.getElementById('pageSizeForm').submit();-->
+<!--                        }-->
+<!--                    </script>-->
+                </div>
 
             </div>
         </div>
     </div>
 </section>
+
 </body>
 </html>

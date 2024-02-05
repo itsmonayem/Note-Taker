@@ -6,6 +6,8 @@ import com.spring.notetaker.entities.Note;
 import com.spring.notetaker.entities.User;
 import com.spring.notetaker.helper.LoggedInfo;
 import com.spring.notetaker.helper.Message;
+import com.spring.notetaker.helper.Pagination;
+import com.spring.notetaker.helper.SearchParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -96,22 +98,86 @@ public class NoteController {
 
 
     @GetMapping("/show-notes")
-    public String showNotes(@RequestParam("page") Optional<Integer> page, Model model, Principal principal) {
+    public String showNotes(@RequestParam("page") Optional<Integer> page,
+                            @RequestParam("pageSize") Optional<Integer> pageSize,
+                            Model model,
+                            Principal principal) {
+
         model.addAttribute("loggedStatus", LoggedInfo.STATUS);
         model.addAttribute("loggedRole",LoggedInfo.ROLE);
 
         User user = this.userRepository.getUserByUserName(principal.getName());
 
-        Pageable pageable = PageRequest.of(page.orElse(0), 5);
+        Pageable pageable = PageRequest.of(page.orElse(0), pageSize.orElse(5));
         Page<Note> noteList = this.noteRepository.findNotesByUser(user, pageable);
 
         model.addAttribute("noteList", noteList);
         model.addAttribute("currentPage", page.orElse(0));
         model.addAttribute("totalPages", noteList.getTotalPages());
 
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(page.orElse(0));
+        pagination.setTotalPages(noteList.getTotalPages());
+        pagination.setPageSize(pageSize.orElse(5));
+        pagination.setQueries("/user/show-notes?page=");
+
+        model.addAttribute("paginationInfo",pagination);
+        SearchParam searchParam = new SearchParam();
+        searchParam.setPageSize(pageSize.orElse(5).toString());
+        model.addAttribute("searchParam",searchParam);
+
         System.out.println(noteList);
         return "normal/show-notes";
     }
+
+
+
+
+    @GetMapping("/search-notes")
+    public String searchNote(@RequestParam("page") Optional<Integer> page,
+                             @RequestParam("title") String title,
+                             @RequestParam("description") String description,
+                             @RequestParam("username") Optional<String> username,
+                             @RequestParam("pageSize") Optional<Integer> pageSize,
+                             Principal principal,
+                             Model model) {
+
+        model.addAttribute("loggedStatus", LoggedInfo.STATUS);
+        model.addAttribute("loggedRole",LoggedInfo.ROLE);
+
+        System.out.println("query");
+        User user = this.userRepository.getUserByUserName(principal.getName());
+
+
+
+        Pageable pageable = PageRequest.of(page.orElse(0), pageSize.orElse(5));
+        Page<Note> notePage;
+
+        notePage = this.noteRepository.findByTitleContainingAndDescriptionContainingAndUser(title, description, username.orElse(user.getName()), pageable);
+
+        //Pagination
+        Pagination paginationInfo = new Pagination();
+        paginationInfo.setCurrentPage(page.orElse(0));
+        paginationInfo.setTotalPages(notePage.getTotalPages());
+        paginationInfo.setQueries("/user/search-notes?title="+title+"&description="+description+"&username="+username.orElse(user.getName())+"&pageSize="+pageSize.orElse(5)+"&page=");
+
+        SearchParam searchParam = new SearchParam();
+        searchParam.setTitle(title);
+        searchParam.setDescription(description);
+        searchParam.setUsername(username.orElse(user.getName()));
+        searchParam.setPageSize(pageSize.orElse(5).toString());
+
+        model.addAttribute("paginationInfo",paginationInfo);
+        model.addAttribute("noteList",notePage);
+        model.addAttribute("searchParam",searchParam);
+
+
+        return "normal/show-notes";
+    }
+
+
+
+
 
 
     @GetMapping("/delete/{id}")

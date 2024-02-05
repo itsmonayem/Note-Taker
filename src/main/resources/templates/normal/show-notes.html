@@ -16,10 +16,38 @@
                     <p th:text="${message.content}"></p>
                 </div>
 
-                <!--search-->
-                <form method="get" th:action="@{/search-notes}" class="search-container">
-                    <input type="text" name="query" class="form-control" id="search-input" placeholder="search title or description">
-                    <button type="submit" class="btn bg-primary" style="margin-top: 5px">Search</button>
+<!--                search-->
+                <form th:action="@{/user/search-notes}" th:object="${searchParam}" class="row gy-2 gx-3 align-items-center">
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="autoSizingInput">Title</label>
+                        <input type="text" class="form-control" id="autoSizingInput" name="title" th:value="${searchParam.title}" placeholder="Search By Title">
+                    </div>
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="autoSizingInputGroup">Description</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="description" th:value="${searchParam.description}" id="autoSizingInputGroup" placeholder="Search by description">
+                        </div>
+                    </div>
+                    <div class="col-auto" th:if="${loggedRole=='ROLE_ADMIN'}">
+                        <label class="visually-hidden" for="autoSizingInputGroup2">User</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="username" th:value="${searchParam.username}" id="autoSizingInputGroup2" placeholder="Search by User">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="pageSize">Page Size</label>
+                        <div class="input-group">
+                            <select name="pageSize" id="pageSize" th:field="${searchParam.pageSize}">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn bg-primary">Search</button>
+                        <button type="reset" class="btn btn-warning">Reset</button>
+                    </div>
                 </form>
 
 
@@ -47,24 +75,8 @@
                     </tbody>
                 </table>
 
-<!--                                Pagination-->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-<!--                        <li class="page-item" th:classappend="${(currentPage == 0)?'disabled':''}"><a class="page-link" th:href="@{'/user/show-notes/'+${currentPage-1}}">Prev</a></li>-->
-<!--                        <li class="page-item" th:each="i : ${#numbers.sequence(1,totalPages)}"-->
-<!--                            th:classappend="${currentPage == i-1?'active':''}"><a class="page-link"-->
-<!--                                                                                  th:href="@{'/user/show-notes/'+${i-1}}"><span-->
-<!--                                th:text="${i}"></span></a></li>-->
-<!--                        <li class="page-item" th:classappend="${(currentPage+1 == totalPages)?'disabled':''}"><a class="page-link"-->
-<!--                                                                                        th:href="@{'/user/show-notes/'+${currentPage+1}}">Next</a></li>-->
-                        <li class="page-item" th:each="i:${#numbers.sequence(currentPage - 3 , currentPage + 3)}">
-                            <a th:if="${i>=0&&i<totalPages}" class="page-link" th:classappend="${currentPage == i?'active':''}" th:href="@{/user/show-notes(page=${i})}">
-                                <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>
-                                <span th:unless="${(i == currentPage - 3 || i == currentPage + 3)}" th:text="${i}"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+
+                <div th:replace="paginationFragment::pagination"></div>
 
             </div>
         </div>
