@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagination</title>
+</head>
+<body>
+    <div th:fragment="pagination" th:object="${paginationInfo}">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" th:each="i:${#numbers.sequence(paginationInfo.currentPage - 3 , paginationInfo.currentPage + 3)}">
+                    <a th:if="${i>=0&&i<paginationInfo.totalPages}" class="page-link" th:classappend="${paginationInfo.currentPage == i?'active':''}" th:href="@{'/search-notes'+${paginationInfo.queries}">
+                        <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>
+                        <span th:unless="${(i == paginationInfo.currentPage - 3 || i == paginationInfo.currentPage + 3)}" th:text="${i}"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>

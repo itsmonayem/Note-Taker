@@ -12,10 +12,36 @@
 
 
                 <!--search-->
-                <form method="get" th:action="@{/search-notes}" class="search-container">
-                    <input type="text" name="query" class="form-control" id="search-input" placeholder="search title or description" th:value="${searchQuery}">
-                    <button type="submit" class="btn bg-primary" style="margin-top: 5px">Search</button>
+<!--                <form method="get" th:action="@{/search-notes}" class="search-container">-->
+<!--                    <input type="text" name="query" class="form-control" id="search-input" placeholder="search title or description" th:value="${paginationInfo.queries}">-->
+<!--                    <button type="submit" class="btn bg-primary" style="margin-top: 5px">Search</button>-->
+<!--                </form>-->
+
+
+
+                <form th:action="@{/search-notes}" class="row gy-2 gx-3 align-items-center">
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="autoSizingInput">Title</label>
+                        <input type="text" class="form-control" id="autoSizingInput" name="title" th:value="${title}" placeholder="Search By Title">
+                    </div>
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="autoSizingInputGroup">Description</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="description" th:value="${description}" id="autoSizingInputGroup" placeholder="Search by description">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="autoSizingInputGroup2">User</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="username" th:value="${username}" id="autoSizingInputGroup2" placeholder="Search by User">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn bg-primary">Search</button>
+                        <button type="reset" class="btn btn-warning">Reset</button>
+                    </div>
                 </form>
+
 
 
                 <table class="table">
@@ -45,16 +71,20 @@
                 </table>
 
                 <!--                                Pagination-->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item" th:each="i:${#numbers.sequence(currentPage - 3 , currentPage + 3)}">
-                            <a th:if="${i>=0&&i<totalPages}" class="page-link" th:classappend="${currentPage == i?'active':''}" th:href="@{'/search-notes?page='+${i}+'&query='+${query}}">
-                                <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>
-                                <span th:unless="${(i == currentPage - 3 || i == currentPage + 3)}" th:text="${i}"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+<!--                <nav aria-label="Page navigation example">-->
+<!--                    <ul class="pagination">-->
+<!--                        <li class="page-item" th:each="i:${#numbers.sequence(currentPage - 3 , currentPage + 3)}">-->
+<!--                            <a th:if="${i>=0&&i<totalPages}" class="page-link" th:classappend="${currentPage == i?'active':''}" th:href="@{'/search-notes?page='+${i}+'&query='+${query}}">-->
+<!--                                <span th:if="${i == currentPage - 3 || i == currentPage + 3}">...</span>-->
+<!--                                <span th:unless="${(i == currentPage - 3 || i == currentPage + 3)}" th:text="${i}"></span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </nav>-->
+<!--                <p>check</p>-->
+                <div th:replace="paginationFragment :: pagination">
+
+                </div>
 
             </div>
         </div>
