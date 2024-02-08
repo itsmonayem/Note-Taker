@@ -19,10 +19,12 @@ import java.security.Principal;
 
 @Controller
 public class UserController {
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    public UserController(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+    }
 
     @Value("${project.image}")
     private String path;

@@ -21,13 +21,20 @@ public class SearchParam {
     public SearchParam() {
     }
 
-    public SearchParam(String title, String description, String username, Time time, String searchFrom) {
+    public SearchParam(String title, String description, String username, Time time, String searchFrom, String pageSize) {
         this.title = title;
         this.description = description;
         this.username = username;
         this.time = time;
         this.searchFrom = searchFrom;
+        this.pageSize = pageSize;
     }
+
+    public SearchParam(String title, String pageSize) {
+        this.title = title;
+        this.pageSize = pageSize;
+    }
+
 
     public String getSearchFrom() {
         return searchFrom;

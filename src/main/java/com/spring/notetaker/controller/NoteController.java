@@ -30,20 +30,23 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/user")
 public class NoteController {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private NoteRepository noteRepository;
+    private final UserRepository userRepository;
+    private final NoteRepository noteRepository;
+    public NoteController(UserRepository userRepository, NoteRepository noteRepository) {
+        this.userRepository = userRepository;
+        this.noteRepository = noteRepository;
+    }
 
     @Value("${project.image}")
     private String rootImagePath;
 
     @ModelAttribute
-    public void setLoggedStatus() {
+    public void setLoggedStatus(Model model) {
         LoggedInfo.STATUS = "loggedIn";
         LoggedInfo.ROLE = "ROLE_USER";
+        model.addAttribute("loggedStatus",LoggedInfo.STATUS);
+        model.addAttribute("loggedRole",LoggedInfo.ROLE);
     }
-
 
 
 
@@ -51,17 +54,13 @@ public class NoteController {
     @GetMapping("/add-note")
     public String formAddNote(Model model) {
         model.addAttribute("title", "Add new note");
-        model.addAttribute("loggedStatus", LoggedInfo.STATUS);
-        model.addAttribute("loggedRole",LoggedInfo.ROLE);
-
         model.addAttribute("note", new Note());
-
         return "normal/add-note";
     }
 
 
     @PostMapping("/do-add-note")
-    public String doAddNote(@ModelAttribute Note note, Principal principal, Model model, @RequestParam("note-image") MultipartFile file, RedirectAttributes redirectAttributes) {
+    public String doAddNote(@ModelAttribute Note note, Principal principal, @RequestParam("note-image") MultipartFile file, RedirectAttributes redirectAttributes) {
         System.out.println(note);
         User user = this.userRepository.getUserByUserName(principal.getName());
 
@@ -100,28 +99,18 @@ public class NoteController {
                             Model model,
                             Principal principal) {
 
-        model.addAttribute("loggedStatus", LoggedInfo.STATUS);
-        model.addAttribute("loggedRole",LoggedInfo.ROLE);
-
         User user = this.userRepository.getUserByUserName(principal.getName());
-
         Pageable pageable = PageRequest.of(page.orElse(1)-1, pageSize.orElse(5));
         Page<Note> noteList = this.noteRepository.findNotesByUser(user, pageable);
 
-        model.addAttribute("noteList", noteList);
-        model.addAttribute("currentPage", page.orElse(0));
-        model.addAttribute("totalPages", noteList.getTotalPages());
+        String queryRequest = "/user/show-notes?page=";
+        Pagination paginationInfo  = CommonUtils.getPagination(new Pagination(),page.orElse(1),noteList.getTotalPages(),queryRequest);
 
-        Pagination pagination = new Pagination();
-        pagination.setCurrentPage(page.orElse(1));
-        pagination.setTotalPages(noteList.getTotalPages());
-        pagination.setPageSize(pageSize.orElse(5));
-        pagination.setQueries("/user/show-notes?page=");
+        SearchParam searchParam = new SearchParamBuilder().pageSize(pageSize.orElse(5).toString()).build();
 
-        model.addAttribute("paginationInfo",pagination);
-        SearchParam searchParam = new SearchParam();
-        searchParam.setPageSize(pageSize.orElse(5).toString());
         model.addAttribute("searchParam",searchParam);
+        model.addAttribute("noteList", noteList);
+        model.addAttribute("paginationInfo",paginationInfo);
 
         System.out.println(noteList);
         return "normal/show-notes";
@@ -139,37 +128,23 @@ public class NoteController {
                              Principal principal,
                              Model model) {
 
-        model.addAttribute("loggedStatus", LoggedInfo.STATUS);
-        model.addAttribute("loggedRole",LoggedInfo.ROLE);
-
-        System.out.println("query");
         User user = this.userRepository.getUserByUserName(principal.getName());
-
-
-
         Pageable pageable = PageRequest.of(page.orElse(1)-1, pageSize.orElse(5));
-
         Page<Note> notePage = this.noteRepository.findByTitleContainingAndDescriptionContainingAndUser(title, description, username.orElse(user.getName()), pageable);
 
-        //Pagination
-//        Pagination paginationInfo = new Pagination();
-//        paginationInfo.setCurrentPage(page.orElse(1));
-//        paginationInfo.setTotalPages(notePage.getTotalPages());
-//        paginationInfo.setQueries("/user/search-notes?title="+title+"&description="+description+"&username="+username.orElse(user.getName())+"&pageSize="+pageSize.orElse(5)+"&page=");
         String queryRequest = "/user/search-notes?title="+title+"&description="+description+"&username="+username.orElse(user.getName())+"&pageSize="+pageSize.orElse(5)+"&page=";
-
         Pagination paginationInfo  = CommonUtils.getPagination(new Pagination(),page.orElse(1),notePage.getTotalPages(),queryRequest);
 
-        SearchParam searchParam = new SearchParam();
-        searchParam.setTitle(title);
-        searchParam.setDescription(description);
-        searchParam.setUsername(username.orElse(user.getName()));
-        searchParam.setPageSize(pageSize.orElse(5).toString());
+        SearchParam searchParam = new SearchParamBuilder()
+                .title(title)
+                .description(description)
+                .username(username.orElse(user.getName()))
+                .pageSize(pageSize.orElse(5).toString())
+                .build();
 
         model.addAttribute("paginationInfo",paginationInfo);
         model.addAttribute("noteList",notePage);
         model.addAttribute("searchParam",searchParam);
-
 
         return "normal/show-notes";
     }

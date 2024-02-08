@@ -14,10 +14,10 @@ import java.security.Principal;
 
 @Controller
 public class HomeController {
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    public HomeController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Value("${project.image}")
     private String path;
@@ -35,6 +35,7 @@ public class HomeController {
             System.out.println(LoggedInfo.ROLE);
             model.addAttribute("loggedRole",LoggedInfo.ROLE);
         }
+
         model.addAttribute("title", "Home Page");
         model.addAttribute("loggedStatus", LoggedInfo.STATUS);
         return "home";
